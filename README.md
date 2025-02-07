@@ -2,7 +2,7 @@
 
 [Odin Project Caesar Cipher Lesson](https://www.theodinproject.com/lessons/ruby-caesar-cipher)
 
-## Backgroun
+## Background
 
 From Wikipedia
 
