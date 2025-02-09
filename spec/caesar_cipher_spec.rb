@@ -32,12 +32,38 @@ describe Caesar_Cipher do
       expect(result).to eql("Input Error - empty string")
     end
 
-    context "right shift of 3" do
-      it "encrypts 'a' to 'd'" do
-        cipher = Caesar_Cipher.new(3)
-        result = cipher.encrypt("abc")
-        expect(result).to eql("def")
+    context "right shift of 1" do
+      it "encrypts 'a' to 'b'" do
+        cipher = Caesar_Cipher.new(1)
+        result = cipher.encrypt("a")
+        expect(result).to eql("b")
       end
+
+      it "encrypts 'z' to 'a'" do
+        cipher = Caesar_Cipher.new(1)
+        result = cipher.encrypt("z")
+        expect(result).to eql("a")
+      end
+
+      it "encrypts 'A' to 'B'" do
+        cipher = Caesar_Cipher.new(1)
+        result = cipher.encrypt("A")
+        expect(result).to eql("B")
+      end
+
+      it "encrypts 'Z' to 'A'" do
+        cipher = Caesar_Cipher.new(1)
+        result = cipher.encrypt("A")
+        expect(result).to eql("B")
+      end
+
+      it "encrypts a lowercase string" do
+        cipher = Caesar_Cipher.new(1)
+        result = cipher.encrypt("abc")
+        expect(result).to eql("bcd")
+      end
+
+      # TODO: encrypt a string with wraparound
 
     # TODO: encrypt a lower case string of one word
     # TODO: encrypt an upper case string of one word
@@ -46,6 +72,5 @@ describe Caesar_Cipher do
     # TODO: encrypt 'What a string!"
     end
 
-    # TODO: shift of 22 and -3 are the same
   end
 end
