@@ -53,13 +53,19 @@ class Caesar_Cipher
       # TODO: what if the char doesn't exist in the lookup?
       if is_uppercase?(char)
         char_as_digit = @uppercase_lookup[char]
-        uppercase_as_digit = (char_as_digit + @right_shift) % 26
-        return @uppercase_lookup.key(uppercase_as_digit)
+        uppercase_as_encrypted_digit = encrypt_digit(char_as_digit) 
+        return @uppercase_lookup.key(uppercase_as_encrypted_digit)
       else
         char_as_digit = @lowercase_lookup[char]
-        lowercase_as_digit = (char_as_digit + @right_shift) % 26
-        return @lowercase_lookup.key(lowercase_as_digit)
+        lowercase_as_encrypted_digit = encrypt_digit(char_as_digit)
+        return @lowercase_lookup.key(lowercase_as_encrypted_digit)
       end
+    end
+
+    # To encrypt a digit representing a letter in the English alphabet
+    # for shift of n: encrypted digit = (digit + shift) % 26
+    def encrypt_digit (digit)
+      (digit + @right_shift) % 26
     end
 end
 
