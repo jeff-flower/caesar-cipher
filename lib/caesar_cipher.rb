@@ -1,4 +1,4 @@
-require 'pry-byebug'
+# require 'pry-byebug'
 
 class Caesar_Cipher
   def initialize(right_shift)
@@ -35,21 +35,14 @@ class Caesar_Cipher
     end
 
     plaintext.split("").reduce("") { |encrypted, char| encrypted << encrypt_char(char) }
-
-    # a == 97, z = 122
-    # Note: methods that might be helpful
-    # each_char
-    # each_codepoint (returns integer value for char)
-    # ord (returns integer value for first index of given string)
-    # Integer#chr returns string value of integer
   end
 
   private
-    def is_uppercase? (char) 
-      char.upcase == char
-    end
-
     def encrypt_char (char)
+      if is_not_alphabetic?(char)
+        return char
+      end
+
       # TODO: what if the char doesn't exist in the lookup?
       if is_uppercase?(char)
         char_as_digit = @uppercase_lookup[char]
@@ -60,6 +53,14 @@ class Caesar_Cipher
         lowercase_as_encrypted_digit = encrypt_digit(char_as_digit)
         return @lowercase_lookup.key(lowercase_as_encrypted_digit)
       end
+    end
+
+    def is_uppercase? (char) 
+      char.upcase == char
+    end
+
+    def is_not_alphabetic? (char)
+      char.match?(/[^a-zA-Z]/)
     end
 
     # To encrypt a digit representing a letter in the English alphabet

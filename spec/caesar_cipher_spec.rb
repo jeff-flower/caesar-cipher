@@ -93,8 +93,17 @@ describe Caesar_Cipher do
         expect(result).to eql("aAb")
       end
 
-    # TODO: preserve characters that are not letters (spaces, commas etc...) 
-    # TODO: encrypt 'What a string!"
+      it "preserves non-alphabetic characters" do
+        cipher = Caesar_Cipher.new(1)
+        result = cipher.encrypt(" !,")
+        expect(result).to eql(" !,")
+      end
+
+      it "encrypts multiple words and punctiuation" do
+        cipher = Caesar_Cipher.new(1)
+        result = cipher.encrypt("What a string!")
+        expect(result).to eql("Xibu b tusjoh!")
+      end
     end
 
   end
