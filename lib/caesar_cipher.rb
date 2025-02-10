@@ -1,3 +1,5 @@
+require 'pry-byebug'
+
 class Caesar_Cipher
   def initialize(right_shift)
     if right_shift < 1 || right_shift > 25
@@ -32,15 +34,7 @@ class Caesar_Cipher
       return "Input Error - empty string"
     end
 
-    if is_uppercase?(plaintext)
-      plaintext_as_digit = @uppercase_lookup[plaintext]
-      encrypted_as_digit = (plaintext_as_digit + @right_shift) % 26
-      @uppercase_lookup.key(encrypted_as_digit)
-    else
-      plaintext_as_digit = @lowercase_lookup[plaintext]
-      encrypted_as_digit = (plaintext_as_digit + @right_shift) % 26
-      @lowercase_lookup.key(encrypted_as_digit)
-    end
+    plaintext.split("").reduce("") { |encrypted, char| encrypted << encrypt_char(char) }
 
     # a == 97, z = 122
     # Note: methods that might be helpful
@@ -53,6 +47,19 @@ class Caesar_Cipher
   private
     def is_uppercase? (char) 
       char.upcase == char
+    end
+
+    def encrypt_char (char)
+      # TODO: what if the char doesn't exist in the lookup?
+      if is_uppercase?(char)
+        char_as_digit = @uppercase_lookup[char]
+        uppercase_as_digit = (char_as_digit + @right_shift) % 26
+        return @uppercase_lookup.key(uppercase_as_digit)
+      else
+        char_as_digit = @lowercase_lookup[char]
+        lowercase_as_digit = (char_as_digit + @right_shift) % 26
+        return @lowercase_lookup.key(lowercase_as_digit)
+      end
     end
 end
 
