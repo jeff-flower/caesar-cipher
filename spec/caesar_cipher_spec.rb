@@ -104,6 +104,12 @@ describe Caesar_Cipher do
         result = cipher.encrypt("What a string!")
         expect(result).to eql("Xibu b tusjoh!")
       end
+
+      it "decrypts multiple words and punctiuation" do
+        cipher = Caesar_Cipher.new(1)
+        result = cipher.decrypt("Xibu b tusjoh!")
+        expect(result).to eql("What a string!")
+      end
     end
 
   end

@@ -34,7 +34,21 @@ class Caesar_Cipher
       return "Input Error - empty string"
     end
 
-    plaintext.split("").reduce("") { |encrypted, char| encrypted << encrypt_char(char) }
+    plaintext.split("").reduce("") { |ciphertext, char| ciphertext << encrypt_char(char) }
+  end
+
+  def decrypt(ciphertext)
+    unless ciphertext.is_a?(String)
+      # TODO: throw error instead?
+      return "Input Error - invalid argument type"
+    end
+
+    if ciphertext.length == 0
+      # TODO: throw error instead?
+      return "Input Error - empty string"
+    end
+
+    ciphertext.split("").reduce("") { |plaintext, char| plaintext << decrypt_char(char) }
   end
 
   private
@@ -55,6 +69,23 @@ class Caesar_Cipher
       end
     end
 
+    def decrypt_char (char)
+      if is_not_alphabetic?(char)
+        return char
+      end
+
+      # TODO: what if the char doesn't exist in the lookup?
+      if is_uppercase?(char)
+        char_as_digit = @uppercase_lookup[char]
+        uppercase_as_decrypted_digit = decrypt_digit(char_as_digit) 
+        return @uppercase_lookup.key(uppercase_as_decrypted_digit)
+      else
+        char_as_digit = @lowercase_lookup[char]
+        lowercase_as_decrypted_digit = decrypt_digit(char_as_digit)
+        return @lowercase_lookup.key(lowercase_as_decrypted_digit)
+      end
+    end
+
     def is_uppercase? (char) 
       char.upcase == char
     end
@@ -67,6 +98,12 @@ class Caesar_Cipher
     # for shift of n: encrypted digit = (digit + shift) % 26
     def encrypt_digit (digit)
       (digit + @right_shift) % 26
+    end
+
+    # To decrypt a digit representing a letter in the English alphabet
+    # for shift of n: encrypted digit = (digit - shift) % 26
+    def decrypt_digit (digit)
+      (digit - @right_shift) % 26
     end
 end
 
