@@ -63,10 +63,24 @@ describe Caesar_Cipher do
         expect(result).to eql("bcd")
       end
 
-      # TODO: encrypt a string with wraparound
+      it "encrypts a lowercase string with wraparound" do
+        cipher = Caesar_Cipher.new(1)
+        result = cipher.encrypt("xyz")
+        expect(result).to eql("yza")
+      end
 
-    # TODO: encrypt a lower case string of one word
-    # TODO: encrypt an upper case string of one word
+      it "encrypts an uppercase string" do
+        cipher = Caesar_Cipher.new(1)
+        result = cipher.encrypt("ABC")
+        expect(result).to eql("BCD")
+      end
+
+      it "encrypts an uppercase string with wraparound" do
+        cipher = Caesar_Cipher.new(1)
+        result = cipher.encrypt("XYZ")
+        expect(result).to eql("YZA")
+      end
+
     # TODO: encrypt a mix of upper and lower case in one word
     # TODO: preserve characters that are not letters (spaces, commas etc...) 
     # TODO: encrypt 'What a string!"
