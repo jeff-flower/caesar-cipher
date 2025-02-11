@@ -8,31 +8,30 @@ describe Caesar_Cipher do
     end
 
     it "does not accept a value less than 1" do
-      cipher = Caesar_Cipher.new(0)
-      expect(cipher.right_shift).to eql("Initialization Error - right shift outside range")
+      expect{ Caesar_Cipher.new(0) }.to raise_error ArgumentError
     end
 
     it "does not accept a value greater than 25" do
-      cipher = Caesar_Cipher.new(26)
-      expect(cipher.right_shift).to eql("Initialization Error - right shift outside range")
+      expect{ Caesar_Cipher.new(26) }.to raise_error ArgumentError
     end
 
   end
 
   describe "#encrypt" do
-    it "returns an error when a string is not passed in" do
-      cipher = Caesar_Cipher.new(3)
-      result = cipher.encrypt(42)
-      expect(result).to eql("Input Error - invalid argument type")
+    context "invalid input" do
+      it "returns an error when a string is not passed in" do
+        cipher = Caesar_Cipher.new(3)
+        expect{ cipher.encrypt(42) }.to raise_error ArgumentError
+      end
+
+      it "ciphertext is an empty string when the plaintext is an empty string" do
+        cipher = Caesar_Cipher.new(3)
+        result = cipher.encrypt("")
+        expect(result).to eql("")
+      end
     end
 
-    it "returns an error when the string is empty" do
-      cipher = Caesar_Cipher.new(3)
-      result = cipher.encrypt("")
-      expect(result).to eql("Input Error - empty string")
-    end
-
-    context "right shift of 1" do
+    context "happy path, right shift of 1" do
       it "encrypts 'a' to 'b'" do
         cipher = Caesar_Cipher.new(1)
         result = cipher.encrypt("a")
@@ -105,12 +104,30 @@ describe Caesar_Cipher do
         expect(result).to eql("Xibu b tusjoh!")
       end
 
+    end
+  end
+
+  describe "decrypt" do
+
+    context "invalid input" do
+      it "returns an error when a string is not passed in" do
+        cipher = Caesar_Cipher.new(3)
+        expect{ cipher.decrypt(42) }.to raise_error ArgumentError
+      end
+
+      it "ciphertext is an empty string when the plaintext is an empty string" do
+        cipher = Caesar_Cipher.new(3)
+        result = cipher.decrypt("")
+        expect(result).to eql("")
+      end
+    end
+
+    context "right shift of 1" do
       it "decrypts multiple words and punctiuation" do
         cipher = Caesar_Cipher.new(1)
         result = cipher.decrypt("Xibu b tusjoh!")
         expect(result).to eql("What a string!")
       end
     end
-
   end
 end

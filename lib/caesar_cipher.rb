@@ -3,8 +3,7 @@
 class Caesar_Cipher
   def initialize(right_shift)
     if right_shift < 1 || right_shift > 25
-      @right_shift = "Initialization Error - right shift outside range"
-      return
+      raise ArgumentError, "right shift outside range of 1 - 25"
     end
 
       @right_shift = right_shift
@@ -25,13 +24,7 @@ class Caesar_Cipher
   
   def encrypt(plaintext)
     unless plaintext.is_a?(String)
-      # TODO: throw error instead?
-      return "Input Error - invalid argument type"
-    end
-
-    if plaintext.length == 0
-      # TODO: throw error instead?
-      return "Input Error - empty string"
+      raise ArgumentError, "Argument to encrypt should be a string"
     end
 
     plaintext.split("").reduce("") { |ciphertext, char| ciphertext << encrypt_char(char) }
@@ -39,13 +32,7 @@ class Caesar_Cipher
 
   def decrypt(ciphertext)
     unless ciphertext.is_a?(String)
-      # TODO: throw error instead?
-      return "Input Error - invalid argument type"
-    end
-
-    if ciphertext.length == 0
-      # TODO: throw error instead?
-      return "Input Error - empty string"
+      raise ArgumentError, "Argument to encrypt should be a string"
     end
 
     ciphertext.split("").reduce("") { |plaintext, char| plaintext << decrypt_char(char) }
@@ -57,7 +44,6 @@ class Caesar_Cipher
         return char
       end
 
-      # TODO: what if the char doesn't exist in the lookup?
       if is_uppercase?(char)
         char_as_digit = @uppercase_lookup[char]
         uppercase_as_encrypted_digit = encrypt_digit(char_as_digit) 
@@ -74,7 +60,6 @@ class Caesar_Cipher
         return char
       end
 
-      # TODO: what if the char doesn't exist in the lookup?
       if is_uppercase?(char)
         char_as_digit = @uppercase_lookup[char]
         uppercase_as_decrypted_digit = decrypt_digit(char_as_digit) 
