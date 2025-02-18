@@ -2,93 +2,83 @@
 
 class Caesar_Cipher
   def initialize(right_shift)
-    if right_shift < 1 || right_shift > 25
-      raise ArgumentError, "right shift outside range of 1 - 25"
+    raise ArgumentError, 'right shift outside range of 1 - 25' if right_shift < 1 || right_shift > 25
+
+    @right_shift = right_shift
+
+    # TODO: initialize these only once
+    @lowercase_lookup = {}
+    ('a'..'z').to_a.each_with_index do |char, index|
+      @lowercase_lookup[char] = index
     end
 
-      @right_shift = right_shift
-
-      # TODO: initialize these only once
-      @lowercase_lookup = Hash.new
-      ('a'..'z').to_a.each_with_index do |char, index|
-        @lowercase_lookup[char] = index
-      end
-
-      @uppercase_lookup = Hash.new
-      ('A'..'Z').to_a.each_with_index do |char, index|
-        @uppercase_lookup[char] = index
-      end
+    @uppercase_lookup = {}
+    ('A'..'Z').to_a.each_with_index do |char, index|
+      @uppercase_lookup[char] = index
+    end
   end
 
   attr_reader :right_shift
-  
-  def encrypt(plaintext)
-    unless plaintext.is_a?(String)
-      raise ArgumentError, "Argument to encrypt should be a string"
-    end
 
-    plaintext.split("").reduce("") { |ciphertext, char| ciphertext << encrypt_char(char) }
+  def encrypt(plaintext)
+    raise ArgumentError, 'Argument to encrypt should be a string' unless plaintext.is_a?(String)
+
+    plaintext.split('').reduce('') { |ciphertext, char| ciphertext << encrypt_char(char) }
   end
 
   def decrypt(ciphertext)
-    unless ciphertext.is_a?(String)
-      raise ArgumentError, "Argument to encrypt should be a string"
-    end
+    raise ArgumentError, 'Argument to encrypt should be a string' unless ciphertext.is_a?(String)
 
-    ciphertext.split("").reduce("") { |plaintext, char| plaintext << decrypt_char(char) }
+    ciphertext.split('').reduce('') { |plaintext, char| plaintext << decrypt_char(char) }
   end
 
   private
-    def encrypt_char (char)
-      if is_not_alphabetic?(char)
-        return char
-      end
 
-      if is_uppercase?(char)
-        char_as_digit = @uppercase_lookup[char]
-        uppercase_as_encrypted_digit = encrypt_digit(char_as_digit) 
-        return @uppercase_lookup.key(uppercase_as_encrypted_digit)
-      else
-        char_as_digit = @lowercase_lookup[char]
-        lowercase_as_encrypted_digit = encrypt_digit(char_as_digit)
-        return @lowercase_lookup.key(lowercase_as_encrypted_digit)
-      end
+  def encrypt_char(char)
+    return char if is_not_alphabetic?(char)
+
+    if is_uppercase?(char)
+      char_as_digit = @uppercase_lookup[char]
+      uppercase_as_encrypted_digit = encrypt_digit(char_as_digit)
+      @uppercase_lookup.key(uppercase_as_encrypted_digit)
+    else
+      char_as_digit = @lowercase_lookup[char]
+      lowercase_as_encrypted_digit = encrypt_digit(char_as_digit)
+      @lowercase_lookup.key(lowercase_as_encrypted_digit)
     end
+  end
 
-    def decrypt_char (char)
-      if is_not_alphabetic?(char)
-        return char
-      end
+  def decrypt_char(char)
+    return char if is_not_alphabetic?(char)
 
-      if is_uppercase?(char)
-        char_as_digit = @uppercase_lookup[char]
-        uppercase_as_decrypted_digit = decrypt_digit(char_as_digit) 
-        return @uppercase_lookup.key(uppercase_as_decrypted_digit)
-      else
-        char_as_digit = @lowercase_lookup[char]
-        lowercase_as_decrypted_digit = decrypt_digit(char_as_digit)
-        return @lowercase_lookup.key(lowercase_as_decrypted_digit)
-      end
+    if is_uppercase?(char)
+      char_as_digit = @uppercase_lookup[char]
+      uppercase_as_decrypted_digit = decrypt_digit(char_as_digit)
+      @uppercase_lookup.key(uppercase_as_decrypted_digit)
+    else
+      char_as_digit = @lowercase_lookup[char]
+      lowercase_as_decrypted_digit = decrypt_digit(char_as_digit)
+      @lowercase_lookup.key(lowercase_as_decrypted_digit)
     end
+  end
 
-    def is_uppercase? (char) 
-      char.upcase == char
-    end
+  def is_uppercase?(char)
+    char.upcase == char
+  end
 
-    def is_not_alphabetic? (char)
-      char.match?(/[^a-zA-Z]/)
-    end
+  def is_not_alphabetic?(char)
+    char.match?(/[^a-zA-Z]/)
+  end
 
-    # To encrypt a digit representing a letter in the English alphabet
-    # for shift of n: encrypted digit = (digit + shift) % 26
-    def encrypt_digit (digit)
-      (digit + @right_shift) % 26
-    end
+  # To encrypt a digit representing a letter in the English alphabet
+  # for shift of n: encrypted digit = (digit + shift) % 26
+  def encrypt_digit(digit)
+    (digit + @right_shift) % 26
+  end
 
-    # To decrypt a digit representing a letter in the English alphabet
-    # for shift of n: encrypted digit = (digit - shift) % 26
-    def decrypt_digit (digit)
-      (digit - @right_shift) % 26
-    end
+  # To decrypt a digit representing a letter in the English alphabet
+  # for shift of n: encrypted digit = (digit - shift) % 26
+  def decrypt_digit(digit)
+    (digit - @right_shift) % 26
+  end
 end
-
