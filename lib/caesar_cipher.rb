@@ -1,6 +1,4 @@
-# require 'pry-byebug'
-
-class Caesar_Cipher
+class CaesarCipher
   def initialize(right_shift)
     raise ArgumentError, 'right shift outside range of 1 - 25' if right_shift < 1 || right_shift > 25
 
@@ -20,16 +18,19 @@ class Caesar_Cipher
 
   attr_reader :right_shift
 
+  def show
+  end
+
   def encrypt(plaintext)
     raise ArgumentError, 'Argument to encrypt should be a string' unless plaintext.is_a?(String)
 
-    plaintext.split('').reduce('') { |ciphertext, char| ciphertext << encrypt_char(char) }
+    plaintext.chars.reduce('') { |ciphertext, char| ciphertext << encrypt_char(char) }
   end
 
   def decrypt(ciphertext)
     raise ArgumentError, 'Argument to encrypt should be a string' unless ciphertext.is_a?(String)
 
-    ciphertext.split('').reduce('') { |plaintext, char| plaintext << decrypt_char(char) }
+    ciphertext.chars.reduce('') { |plaintext, char| plaintext << decrypt_char(char) }
   end
 
   private
@@ -37,7 +38,7 @@ class Caesar_Cipher
   def encrypt_char(char)
     return char if is_not_alphabetic?(char)
 
-    if is_uppercase?(char)
+    if uppercase?(char)
       char_as_digit = @uppercase_lookup[char]
       uppercase_as_encrypted_digit = encrypt_digit(char_as_digit)
       @uppercase_lookup.key(uppercase_as_encrypted_digit)
@@ -51,7 +52,7 @@ class Caesar_Cipher
   def decrypt_char(char)
     return char if is_not_alphabetic?(char)
 
-    if is_uppercase?(char)
+    if uppercase?(char)
       char_as_digit = @uppercase_lookup[char]
       uppercase_as_decrypted_digit = decrypt_digit(char_as_digit)
       @uppercase_lookup.key(uppercase_as_decrypted_digit)
@@ -62,7 +63,7 @@ class Caesar_Cipher
     end
   end
 
-  def is_uppercase?(char)
+  def uppercase?(char)
     char.upcase == char
   end
 
