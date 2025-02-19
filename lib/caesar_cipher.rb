@@ -1,3 +1,4 @@
+# Encrypt and Decrypt English language strings with a specified shift
 class CaesarCipher
   def initialize(right_shift)
     raise ArgumentError, 'right shift outside range of 1 - 25' if right_shift < 1 || right_shift > 25
@@ -18,9 +19,6 @@ class CaesarCipher
 
   attr_reader :right_shift
 
-  def show
-  end
-
   def encrypt(plaintext)
     raise ArgumentError, 'Argument to encrypt should be a string' unless plaintext.is_a?(String)
 
@@ -36,7 +34,7 @@ class CaesarCipher
   private
 
   def encrypt_char(char)
-    return char if is_not_alphabetic?(char)
+    return char if alphabetic?(char)
 
     if uppercase?(char)
       char_as_digit = @uppercase_lookup[char]
@@ -50,7 +48,7 @@ class CaesarCipher
   end
 
   def decrypt_char(char)
-    return char if is_not_alphabetic?(char)
+    return char if alphabetic?(char)
 
     if uppercase?(char)
       char_as_digit = @uppercase_lookup[char]
@@ -67,7 +65,7 @@ class CaesarCipher
     char.upcase == char
   end
 
-  def is_not_alphabetic?(char)
+  def alphabetic?(char)
     char.match?(/[^a-zA-Z]/)
   end
 
